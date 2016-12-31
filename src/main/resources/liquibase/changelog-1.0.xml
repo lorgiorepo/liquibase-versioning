@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="db-name-1" author="lorgio" failOnError="false">
+        <comment>Creating base tables</comment>
+
+        <createTable tableName="EVENT_STATE">
+            <column name="EVENT_STATE_ID" type="int(11)">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="EVENT_STATE_NAME" type="varchar(15)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="USER_EVENT">
+            <column name="USER_EVENT_ID" type="int(11)">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="USER_EVENT_NAME" type="varchar(10)">
+                <constraints nullable="false" />
+            </column>
+            <column name="EVENT_STATE_ID" type="int(1)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="USER_EVENT_DATE" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="USER_EVENT" baseColumnNames="EVENT_STATE_ID"
+                                 constraintName="FK_EVENT_STATE_ID" referencedTableName="EVENT_STATE"
+                                 referencedColumnNames="EVENT_STATE_ID" />
+        
+        <sqlFile path="liquibase/1.0/dump-1.0.sql" encoding="UTF-8"/>
+
+        <rollback>
+            <dropTable tableName="USER_EVENT" />
+            <dropTable tableName="EVENT_STATE" />
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
